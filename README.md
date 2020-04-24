@@ -1,5 +1,12 @@
 # yogaMaster瑜伽大师（python+django+mysql）
 
+## 前端页面static
+用户信息：usrInfo.html  
+学习记录：usrStudyRecord.html  
+个人收藏：usrFav.html  
+瑜伽管理：yogaManagement.html  
+添加瑜伽姿势：addYoga.html
+
 ## 基础操作
 
 >1. 使用mysql数据库  
@@ -28,7 +35,7 @@ Python manage.py  runserver
 
 ### 小程序接口设计
 
-1. Get    http://127.0.0.1:8000/home/getYogaList                
+1. Get    http://127.0.0.1:8000/home/getYogaByLevel                
   //根据level返回对应的瑜伽列表（初中高代号123）  
   request：{"level":"1"}  
   Jsonresponse：  
@@ -38,7 +45,7 @@ Python manage.py  runserver
     "data": "[{\"model\": \"yogaMaster.yoga\", \"pk\": \"ayoga\", \"fields\": {\"level\": 1, \"video\": \"avideourl\"}}, {\"model\": \"yogaMaster.yoga\", \"pk\": \"byoga\", \"fields\": {\"level\": 1, \"video\": \"bvideourl\"}}]"  
   }  
 
-2. Get     http://127.0.0.1:8000/home/getYogaDetail          
+2. Get     http://127.0.0.1:8000/home/getYogaImg          
   //根据每个瑜伽动作文件名返回对应的图片  
   request: {"yogaName":"ayoga"}   
   Jsonresponse：  
@@ -106,17 +113,7 @@ Python manage.py  runserver
 
 ### 后台管理网站接口设计
 
-1. Get    http://127.0.0.1:8000/usr/getUsrInfo  
-  //获取用户信息  
-  request:    {"usrid":"1"}  
-  Jsonresponse：  
-  {  
-    "state": "200",  
-    "message": "获取用户信息成功",  
-    "data": "[{\"model\": \"yogaMaster.user\", \"pk\": 1, \"fields\": {\"usrname\": \"yy\", \"password\": \"abc\", \"usrProfile\": \"yogaMaster/images/avater/2.jpg\"}}]"  
-  }
-
-2. Get    http://127.0.0.1:8000/usr/getStudyRecord  
+1. Get    http://127.0.0.1:8000/usr/getStudyRecord  
   //获取用户学习记录  
   request:
   {"usrid":"1"}  
@@ -165,47 +162,40 @@ Python manage.py  runserver
     "data": "[{\"model\": \"yogaMaster.yoga\", \"pk\": \"ayoga\", \"fields\": {\"level\": 1, \"video\": \"avideourl\"}}, {\"model\": \"yogaMaster.yoga\", \"pk\": \"byoga\", \"fields\": {\"level\": 1, \"video\": \"bvideourl\"}}]"  
   }  
 
-7. Get     http://127.0.0.1:8000/home/getYogaDetail          
-  //根据每个瑜伽动作文件名返回对应的图片  
-  request: {"yogaName":"ayoga"}   
+7. Get    http://127.0.0.1:8000/home/getYogaByLevel                
+  //根据level返回对应的瑜伽列表（初中高代号123）  
+  request：{"level":"1"}  
   Jsonresponse：  
   {  
-  ​    "state": "200",  
-  ​    "message": "获取瑜伽图片列表成功",  
-  ​    "data": "http://127.0.0.1:8000/yogaMaster/images/yoga/2.jpg[/--sp--/]http://127.0.0.1:8000/yogaMaster/images/yoga/3.jpg[/--sp--/]http://127.0.0.1:8000/yogaMaster/images/yoga/4.jpg"  
-  }
+    "state": "200",  
+    "message": "获取瑜伽列表成功",  
+    "data": "[{\"model\": \"yogaMaster.yoga\", \"pk\": \"ayoga\", \"fields\": {\"level\": 1, \"video\": \"avideourl\"}}, {\"model\": \"yogaMaster.yoga\", \"pk\": \"byoga\", \"fields\": {\"level\": 1, \"video\": \"bvideourl\"}}]"  
+  }  
+
 
 8. (新增)  Post    http://127.0.0.1:8000/home/addYoga  
   //在后端管理页面上传新的瑜伽信息 
   requset :  
   var form = new FormData();  
-  form.append("imgid", "1");  
-  form.append("uploadimg", fileInput.files[0], "/C:/Users/yang/Desktop/3.png");  
-  Jsonresponse：  
+  	formData.append("yogaName",document.getElementById("yoganame").value);  
+		var options=("#level option:selected");    
+    formData.append("level",options.val());  
+		formData.append("imgDescription",document.getElementById("imgdescription").value);  
+		formData.append("yogaImg",$('#image')[0].files[0]);  
+    Jsonresponse：  
   {  
   ​    "state": "200",  
   ​    "message": "瑜伽图信息上传成功" 
   }  
-
-9. (新增)  Get    http://127.0.0.1:8000/home/getAllResult  
-  //获取全部的结果比对图片  
-  Jsonresponse：  
-   {  
-  ​    "state": "200",  
-  ​    "message": "获取全部结果比对信息成功",  
-  ​    "data": "[{\"model\": \"yogaMaster.Result\", \"pk\": \"ayoga\", \"fields\": {\"level\": 1, \"video\": \"avideourl\"}}, {\"model\": \"yogaMaster.Result\", \"pk\": \"byoga\", \"fields\": {\"level\": 1, \"video\": \"bvideourl\"}}]"  
-  }
 
 
 ## 数据库设计
 
 表名|属性
 -|-
-yoga|Level：int，瑜伽等级
--|yogaName：varchar，瑜伽名（pk）
--|video：varchar，瑜伽视频链接
 yogaimage|imgid：int，每个动作id（pk）
--|yogaName：varchar，瑜伽名（fk）
+-|yogaName：varchar，瑜伽名
+-|Level：int，瑜伽等级
 -|imgDescription：varchar，每个动作描述
 -|image：varchar，每个动作的图片文件路径
 user|usrid：int，用户id（pk）
