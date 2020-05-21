@@ -19,7 +19,8 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
 
-from yogaMaster.views import getYogaByLevel,getYogaImg,getUsrAvater,getUsrInfo,register,getResult,getStudyRecord,getFavorites,getAllUsr,login,getAllYoga,addYoga,index
+from yogaMaster.views import getYogaByLevel, getYogaImg, getUsrAvater, getUsrInfo, register, getResult, getStudyRecord, \
+    getFavorites, getAllUsr, login, getAllYoga, addYoga, addFavorites, delFavorites, delAllFavorites, ifFavorites
 from . import settings
 
 
@@ -28,7 +29,7 @@ def getAllResult(args):
 
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name="yogaManagement.html")),
+    url(r'^$', TemplateView.as_view(template_name="login.html")),
     path('admin/', admin.site.urls),
     #小程序接口
     path('home/getYogaByLevel', getYogaByLevel),
@@ -37,8 +38,13 @@ urlpatterns = [
     path('usr/getUsrInfo', getUsrInfo),
     path('usr/getStudyRecord', getStudyRecord),
     path('usr/getFavorites', getFavorites),
+    path('usr/addFavorites', addFavorites),
+    path('usr/delFavorites', delFavorites),
+    path('usr/ifFavorite', ifFavorites),
+    path('usr/delAllFavorites', delAllFavorites),
     path('usr/register', register),
     path('usr/getUsrAvater', getUsrAvater),
+
 
     #后端管理新增接口
     path('home/getAllYoga', getAllYoga),
